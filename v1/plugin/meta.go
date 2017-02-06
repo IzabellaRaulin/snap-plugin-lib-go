@@ -94,6 +94,9 @@ type meta struct {
 	Unsecure         bool
 	CacheTTL         time.Duration
 	RoutingStrategy  router
+
+	CertPath string
+	KeyPath string
 }
 
 // newMeta sets defaults, applies options, and then returns a meta struct

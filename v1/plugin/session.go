@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	logrus "github.com/Sirupsen/logrus"
 	"net/http/pprof"
 
 	"github.com/julienschmidt/httprouter"
@@ -32,18 +33,28 @@ type Arg struct {
 
 	// enable pprof
 	Pprof bool
+
+	CertPath string
+	KeyPath string
 }
 
 // getArgs returns plugin args or default ones
-func getArgs() error {
+func getArgs() (*Arg, error) {
 	pluginArg := &Arg{}
 	if os.Args[1] == "" {
-		return nil
+		return nil, nil
 	}
 	err := json.Unmarshal([]byte(os.Args[1]), pluginArg)
 	if err != nil {
-		return err
+		return nil, err
 	}
+
+	logrus.WithFields(logrus.Fields{
+		"module": "snap-plugin-lib-go",
+		"block": "v1/plugin/session.go",
+		"function": "getArgs",
+		"pluginArgs": pluginArg,
+	}).Info("Debug Iza - getting plugin args inside plugin-lib")
 
 	// If no port was provided we let the OS select a port for us.
 	// This is safe as address is returned in the Response and keep
@@ -57,10 +68,10 @@ func getArgs() error {
 		PingTimeoutDurationDefault = pluginArg.PingTimeoutDuration
 	}
 	if pluginArg.Pprof {
-		return getPort()
+		return pluginArg, getPort()
 	}
 
-	return nil
+	return pluginArg, nil
 }
 
 func getPort() error {

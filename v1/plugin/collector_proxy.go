@@ -21,6 +21,7 @@ package plugin
 
 import (
 	"golang.org/x/net/context"
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin/rpc"
 )
@@ -34,6 +35,10 @@ type collectorProxy struct {
 }
 
 func (c *collectorProxy) CollectMetrics(ctx context.Context, arg *rpc.MetricsArg) (*rpc.MetricsReply, error) {
+	log.WithFields(log.Fields{
+		"block": "v1/plugin/collector_proxy.go",
+		"module": "snap-plugin-lib-go",
+	}).Info("Debug Iza - collectorProxy.CollectMetrics")
 	metrics := []Metric{}
 
 	for _, mt := range arg.Metrics {
@@ -57,6 +62,10 @@ func (c *collectorProxy) CollectMetrics(ctx context.Context, arg *rpc.MetricsArg
 }
 
 func (c *collectorProxy) GetMetricTypes(ctx context.Context, arg *rpc.GetMetricTypesArg) (*rpc.MetricsReply, error) {
+	log.WithFields(log.Fields{
+		"block": "v1/plugin/collector_proxy.go",
+		"module": "snap-plugin-lib-go",
+	}).Info("Debug Iza - collectorProxy.GetMetricType")
 	cfg := fromProtoConfig(arg.Config)
 
 	r, err := c.plugin.GetMetricTypes(cfg)

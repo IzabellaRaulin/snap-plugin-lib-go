@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "schedule": {
+    "type": "simple",
+    "interval": "1s"
+  },
+  "workflow": {
+    "collect": {
+      "metrics": {
+        "/random/float": {},
+        "/random/string": {},
+        "/random/integer": {}
+      },
+	"config":{
+      },
+      "process": null,
+      "publish": [
+        {
+          "plugin_name": "test-file-publisher",
+          "config": {
+            "file": "/tmp/published_diskstats.log"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"time"
 
+	log "github.com/Sirupsen/logrus"
 	"golang.org/x/net/context"
 
 	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin/rpc"
@@ -47,6 +48,11 @@ type pluginProxy struct {
 }
 
 func newPluginProxy(plugin Plugin) *pluginProxy {
+	log.WithFields(log.Fields{
+		"block": "v1/plugin/plugin_proxy.go",
+		"module": "snap-plugin-lib-go",
+	}).Info("Debug Iza - newPluginProxy")
+
 	return &pluginProxy{
 		plugin:              plugin,
 		PingTimeoutDuration: PingTimeoutDurationDefault,
@@ -55,6 +61,10 @@ func newPluginProxy(plugin Plugin) *pluginProxy {
 }
 
 func (p *pluginProxy) Ping(ctx context.Context, arg *rpc.Empty) (*rpc.ErrReply, error) {
+	log.WithFields(log.Fields{
+		"block": "v1/plugin/plugin_proxy.go",
+		"module": "snap-plugin-lib-go",
+	}).Info("Debug Iza - pluginProxy.Ping")
 	p.LastPing = time.Now()
 	//Change to log
 	fmt.Println("Heartbeat received at:", p.LastPing)
@@ -63,11 +73,20 @@ func (p *pluginProxy) Ping(ctx context.Context, arg *rpc.Empty) (*rpc.ErrReply, 
 
 func (p *pluginProxy) Kill(ctx context.Context, arg *rpc.KillArg) (*rpc.ErrReply, error) {
 	// TODO(CDR) log kill reason
+	log.WithFields(log.Fields{
+		"block": "v1/plugin/plugin_proxy.go",
+		"module": "snap-plugin-lib-go",
+	}).Info("Debug Iza - pluginProxy.Kill and send an empty struct to p.halt")
 	p.halt <- struct{}{}
 	return &rpc.ErrReply{}, nil
 }
 
 func (p *pluginProxy) GetConfigPolicy(ctx context.Context, arg *rpc.Empty) (*rpc.GetConfigPolicyReply, error) {
+	log.WithFields(log.Fields{
+		"block": "v1/plugin/plugin_proxy.go",
+		"module": "snap-plugin-lib-go",
+	}).Info("Debug Iza - pluginProxy.GetConfigPolicy")
+
 	policy, err := p.plugin.GetConfigPolicy()
 	if err != nil {
 		return nil, err
