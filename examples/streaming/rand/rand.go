@@ -61,7 +61,7 @@ type RandCollector struct {
 	metrics []plugin.Metric
 }
 
-// StreamMetrics taks both an in and out channel of []plugin.Metric
+// StreamMetrics takes both an in and out channel of []plugin.Metric
 //
 // The metrics_in channel is used to set/update the metrics that Snap is
 // currently requesting to be collected by the plugin.
@@ -80,6 +80,7 @@ func (r *RandCollector) StreamMetrics(
 }
 
 func (r *RandCollector) drainMetrics(in chan []plugin.Metric) {
+	fmt.Println("Debug Iza, module: drainMetrics")
 	for {
 		var mts []plugin.Metric
 		mts = <-in
@@ -87,7 +88,17 @@ func (r *RandCollector) drainMetrics(in chan []plugin.Metric) {
 	}
 }
 
+//todo iza
+//func (r *RandCollector) SetMaxCollectDuration(t time.Duration) {
+//	fmt.Println("setting max collect duration to: ", t)
+//}
+//
+//func (r *RandCollector) SetMaxBuffer(i int64) {
+//	fmt.Println("setting max buffer to : ", i)
+//}
+
 func (r *RandCollector) streamIt(ch chan []plugin.Metric, err chan string) {
+	fmt.Println("Debug Iza, rand.go: streaimIT")
 	for {
 		if r.metrics == nil {
 			time.Sleep(time.Second)
