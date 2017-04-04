@@ -45,7 +45,7 @@ type Collector interface {
 	CollectMetrics([]Metric) ([]Metric, error)
 }
 
-// Processor is a plugin which filters, agregates, or decorates data in the
+// Processor is a plugin which filters, aggregates, or decorates data in the
 // Snap pipeline.
 type Processor interface {
 	Plugin
@@ -79,6 +79,13 @@ type StreamCollector interface {
 	// A channel for error strings that the library will report to snap
 	// as task errors.
 	StreamMetrics(chan []Metric, chan []Metric, chan string) error
+	// setMaxbuffer sets the maximum number of metrics the plugin should buffer
+	// before sending metrics.
+	//setMaxBuffer(int64)
+	// SetMaxCollectionDuration sets the maximum duration between collections
+	// before metrics should be sent (i.e.5s MaxCollectionDuration means that after
+	// 5 seconds, the plugin should send whatever it has instead of waiting longer).
+	//setMaxCollectDuration(time.Duration)
 	GetMetricTypes(Config) ([]Metric, error)
 }
 
