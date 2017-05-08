@@ -67,18 +67,11 @@ func (p *StreamProxy) StreamMetrics(stream rpc.StreamCollector_StreamMetricsServ
 	// Metrics out of the plugin into snap.
 	outChan := make(chan []Metric)
 
-	go func() {
-		err := p.plugin.StreamMetrics(inChan, outChan, errChan)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}()
-
 	go p.metricSend(outChan, stream)
 	go p.errorSend(errChan, stream)
-	p.streamRecv(inChan, stream)
+	go p.streamRecv(inChan, stream)
 
-	return nil
+	return p.plugin.StreamMetrics(inChan, outChan, errChan)
 }
 
 func (p *StreamProxy) SetConfig(context.Context, *rpc.ConfigMap) (*rpc.ErrReply, error) {
